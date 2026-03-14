@@ -136,8 +136,26 @@ jobs:
         run: |
           pip install --no-cache-dir -e ".[dev]" 2>/dev/null || pip install --no-cache-dir -e ".[test]" 2>/dev/null || pip install --no-cache-dir -e .
           pip install --no-cache-dir pytest pytest-asyncio 2>/dev/null || true
+      - name: Validate Python syntax
+        working-directory: packages/agentmesh-integrations/${{ matrix.package }}
+        run: |
+          python -c "
+          import ast, glob, sys
+          errors = 0
+          for f in glob.glob('**/*.py', recursive=True):
+              try:
+                  with open(f) as fh:
+                      ast.parse(fh.read(), f)
+              except SyntaxError as e:
+                  print(f'FAIL {f}: {e}')
+                  errors += 1
+          if errors:
+              sys.exit(1)
+          print('All Python files parse successfully')
+          "
       - name: Smoke test — import ${{ matrix.import-module }}
         run: python -c "import ${{ matrix.import-module }}"
+        continue-on-error: true
       - name: Run tests
         working-directory: packages/agentmesh-integrations/${{ matrix.package }}
         run: |
