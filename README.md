@@ -168,7 +168,7 @@ Governance overhead is **sub-millisecond** — negligible compared to any LLM AP
 
 **Bottom line:** Governance adds **< 0.1 ms per action** — roughly 10,000× faster than an LLM API call.
 
-Full methodology, per-adapter breakdowns, and memory profiling: **[BENCHMARKS.md](BENCHMARKS.md)**. Benchmarks are reproducible via the scripts in each package's `benchmarks/` directory and run on every release via CI.
+Full methodology, per-adapter breakdowns, and memory profiling: **[BENCHMARKS.md](BENCHMARKS.md)**. Benchmarks are reproducible via the scripts in each package's `benchmarks/` directory and run on every release via CI ([`.github/workflows/benchmarks.yml`](.github/workflows/benchmarks.yml)).
 
 ## Documentation
 
