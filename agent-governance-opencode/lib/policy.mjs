@@ -83,6 +83,8 @@ export async function loadPolicy({
     } catch (error) {
       configuredPolicyError = error;
     }
+  } else if (policyPath) {
+    configuredPolicyError = new Error(`Configured policy file not found: ${configuredPolicyPath}`);
   }
 
   if (!compiledPolicy) {
