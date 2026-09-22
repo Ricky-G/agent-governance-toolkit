@@ -330,18 +330,22 @@ class TestPolicyServer:
 
     def test_trust_policy_fallback_counts_effective_rules(self, tmp_path):
         from agentmesh.server import policy_server
+        from agentmesh.governance.trust_policy import TrustCondition, TrustPolicy, TrustRule
 
-        (tmp_path / "trust.yaml").write_text(
-            "name: trust-policy\n"
-            "rules:\n"
-            "  - name: allow-trusted\n"
-            "    condition:\n"
-            "      field: trust_score\n"
-            "      operator: gte\n"
-            "      value: 500\n"
-            "    action: allow\n",
-            encoding="utf-8",
-        )
+        TrustPolicy(
+            name="trust-policy",
+            rules=[
+                TrustRule(
+                    name="allow-trusted",
+                    condition=TrustCondition(
+                        field="trust_score",
+                        operator="gte",
+                        value=500,
+                    ),
+                    action="allow",
+                )
+            ],
+        ).to_yaml(tmp_path / "trust.yaml")
         policy_server.POLICY_DIR = str(tmp_path)
 
         with TestClient(policy_server.app) as client:
